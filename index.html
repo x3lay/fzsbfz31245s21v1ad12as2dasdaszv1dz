@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Telegram Web Apps SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gradient-to-br from-blue-900 to-purple-900 text-white min-h-screen flex items-center justify-center">
+    <div class="container mx-auto p-4 max-w-md">
+        <h1 class="text-3xl font-bold text-center mb-6">Clicker Game 🎮</h1>
+        <div id="auth-section" class="text-center mb-4 hidden">
+            <button id="auth-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Войти через Telegram
+            </button>
+        </div>
+        <div id="game-section" class="hidden">
+            <div id="status" class="text-center mb-4">
+                <p>Имя: <span id="username">Unknown</span></p>
+                <p>Уровень: <span id="level">1</span></p>
+                <p>Баланс: <span id="balance">1000</span> монет</p>
+            </div>
+            <div class="flex justify-center mb-4">
+                <button id="click-button" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-full shadow-lg transform transition hover:scale-105">
+                    Клик! (+10 монет)
+                </button>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <button id="tasks-button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    Задания
+                </button>
+                <button id="withdraw-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                    Вывод
+                </button>
+            </div>
+            <div id="tasks-menu" class="hidden">
+                <h2 class="text-xl font-bold mb-2">Задания</h2>
+                <button id="task-work" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full mb-2">
+                    Работа (+500, риск 10%)
+                </button>
+                <button id="task-trade" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded w-full mb-2">
+                    Торговля (+2000, риск 30%)
+                </button>
+                <button id="back-button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-full">
+                    Назад
+                </button>
+            </div>
+            <div id="message" class="text-center mt-4"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
