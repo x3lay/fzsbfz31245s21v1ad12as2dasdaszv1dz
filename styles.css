@@ -1,40 +1,77 @@
 body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1f1f1f 0%, #2c2c2c 100%);
     overflow-x: hidden;
 }
 
 .container {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 1.5rem;
-    padding: 2rem;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.font-exo {
+    font-family: 'Exo 2', sans-serif;
+}
+
+.shadow-neon {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), 0 0 30px rgba(0, 255, 255, 0.3);
 }
 
 button {
     transition: all 0.3s ease;
 }
 
+.click-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.click-effect::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% { width: 0; height: 0; opacity: 1; }
+    100% { width: 200px; height: 200px; opacity: 0; }
+}
+
 #click-button {
-    animation: pulse 1.5s infinite;
+    animation: glow 2s infinite alternate;
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-    100% { transform: scale(1); }
+@keyframes glow {
+    0% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+    100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.8); }
 }
 
-#message {
-    animation: fadeIn 0.5s ease-in;
+.notification {
+    animation: fadeInOut 3s ease-in-out;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
 }
 
-h1, h2 {
-    font-family: 'Orbitron', sans-serif;
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }

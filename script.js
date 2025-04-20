@@ -20,62 +20,21 @@ function updateUI() {
     document.getElementById('username').textContent = state.username;
     document.getElementById('level').textContent = state.level;
     document.getElementById('balance').textContent = state.balance.toFixed(1);
+    const progress = Math.min((state.balance / 1000000) * 100, 100);
+    document.getElementById('progress-bar').style.width = `${progress}%`;
 }
 
 function showMessage(message) {
     const messageDiv = document.getElementById('message');
     messageDiv.textContent = message;
-    setTimeout(() => messageDiv.textContent = '', 3000);
+    messageDiv.classList.remove('hidden');
+    setTimeout(() => {
+        messageDiv.classList.add('hidden');
+        messageDiv.textContent = '';
+    }, 3000);
 }
 
-async function syncWithBot() {
-    if (!state.chat_id) {
-        console.warn('Нет chat_id, синхронизация невозможна');
-        return;
-    }
-    try {
-        const response = await fetch('https://your-server.com/sync', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(state)
-        });
-        const data = await response.json();
-        console.log('Синхронизация:', data);
-        if (data.status === 'success') {
-            showMessage('Данные синхронизированы с ботом!');
-        } else {
-            showMessage('Ошибка синхронизации: ' + data.message);
-        }
-    } catch (error) {
-        console.error('Ошибка синхронизации:', error);
-        showMessage('Не удалось синхронизировать данные.');
-    }
-}
-
-async function loadFromBot() {
-    if (!state.chat_id) {
-        console.warn('Нет chat_id, загрузка данных невозможна');
-        return;
-    }
-    try {
-        const response = await fetch(`https://your-server.com/get_user/${state.chat_id}`);
-        const data = await response.json();
-        console.log('Загрузка данных:', data);
-        if (data.status === 'success') {
-            Object.assign(state, data.data);
-            updateUI();
-            saveState();
-            showMessage('Данные загружены из бота!');
-        } else {
-            showMessage('Ошибка загрузки данных: ' + data.message);
-        }
-    } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
-        showMessage('Не удалось загрузить данные.');
-    }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     loadState();
 
     const authSection = document.getElementById('auth-section');
@@ -95,21 +54,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             gameSection.classList.remove('hidden');
             updateUI();
             saveState();
-            await loadFromBot(); // Загрузка данных при входе
-            await syncWithBot(); // Синхронизация после загрузки
         } else {
             authSection.classList.remove('hidden');
             messageDiv.textContent = 'Пожалуйста, войдите через Telegram.';
+            messageDiv.classList.remove('hidden');
         }
     } else {
-        console.warn('Telegram Web App SDK не доступен. Тестирование в режиме без авторизации.');
+        console.warn('Telegram Web App SDK не доступен. Тестирование без авторизации.');
         authSection.classList.add('hidden');
         gameSection.classList.remove('hidden');
         updateUI();
-        messageDiv.textContent = 'Для полной функциональности откройте приложение через Telegram.';
+        messageDiv.textContent = 'Для полной функциональности откройте через Telegram.';
+        messageDiv.classList.remove('hidden');
     }
 
-    authButton.addEventListener('click', async () => {
+    authButton.addEventListener('click', () => {
         if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.ready();
             const initData = window.Telegram.WebApp.initDataUnsafe;
@@ -122,17 +81,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 updateUI();
                 saveState();
                 showMessage('Авторизация успешна!');
-                await loadFromBot();
-                await syncWithBot();
             } else {
-                showMessage('Ошибка авторизации. Откройте приложение через Telegram.');
+                showMessage('Ошибка авторизации. Откройте через Telegram.');
             }
         } else {
             showMessage('Telegram Web App не доступен. Откройте через Telegram.');
         }
     });
 
-    document.getElementById('click-button').addEventListener('click', async () => {
+    document.getElementById('click-button').addEventListener('click', () => {
         state.balance += 10;
         if (state.balance >= 10000 && state.level < 2) {
             state.level = 2;
@@ -145,7 +102,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         updateUI();
         saveState();
-        await syncWithBot();
     });
 
     document.getElementById('tasks-button').addEventListener('click', () => {
@@ -155,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('withdraw-button').classList.add('hidden');
     });
 
-    document.getElementById('task-work').addEventListener('click', async () => {
+    document.getElementById('task-work').addEventListener('click', () => {
         if (Math.random() <= 0.1) {
             state.balance -= 100;
             if (state.balance < 0) state.balance = 0;
@@ -171,10 +127,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         updateUI();
         saveState();
-        await syncWithBot();
     });
 
-    document.getElementById('task-trade').addEventListener('click', async () => {
+    document.getElementById('task-trade').addEventListener('click', () => {
         if (Math.random() <= 0.3) {
             state.balance -= 500;
             if (state.balance < 0) state.balance = 0;
@@ -190,7 +145,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         updateUI();
         saveState();
-        await syncWithBot();
     });
 
     document.getElementById('back-button').addEventListener('click', () => {
@@ -200,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('withdraw-button').classList.remove('hidden');
     });
 
-    document.getElementById('withdraw-button').addEventListener('click', async () => {
+    document.getElementById('withdraw-button').addEventListener('click', () => {
         if (state.balance < 1000) {
             showMessage('Недостаточно монет для вывода (мин. 1000)!');
         } else {
@@ -209,7 +163,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             showMessage(`Вы вывели ${points} очков! Баланс: 0`);
             updateUI();
             saveState();
-            await syncWithBot();
         }
     });
 });
