@@ -1,20 +1,40 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    overflow-x: hidden;
 }
+
+.container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
 button {
     transition: all 0.3s ease;
 }
+
 #click-button {
-    animation: pulse 2s infinite;
+    animation: pulse 1.5s infinite;
 }
+
 @keyframes pulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.08); }
     100% { transform: scale(1); }
 }
-.container {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    backdrop-filter: blur(10px);
+
+#message {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2 {
+    font-family: 'Orbitron', sans-serif;
 }
